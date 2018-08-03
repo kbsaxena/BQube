@@ -1,47 +1,47 @@
 package com.cartZone.cart.serviceImpl;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.stereotype.Component;
 
 import com.cartZone.cart.pojo.Registration;
 import com.cartZone.cart.service.LoginServices;
 
+/***
+ * 
+ * Service Layer for Adding Data
+ */
+@Component
 public class LoginServicesImpl implements LoginServices {
 
-	List<Registration> registrationList = new ArrayList<>();
+	Map<String,Registration> registrationMap = null;
 	
-	//Under process
+	public LoginServicesImpl() {
+		registrationMap = new HashMap<>();
+	}
+
+	/***
+	 * For Checking if user is valid or not
+	 */
 	@Override
-	public void login(String username, String password) {
-		
-
+	public boolean login(String username, String password) {
+		Registration registerationObj = registrationMap.get(username);
+		return registerationObj.getUsername().equals(username) && registerationObj.getPassword().equals(password);
 	}
 
+	/***
+	 * Registering the user with details
+	 * 
+	 * Not registering, If username is present
+	 */
 	@Override
-	public List<Registration> register(String name, String username, String password, String phone, String email) {
-		Registration registration = new Registration();
-		registration.setId(1);
-		registration.setName(name);
-		registration.setEmail(email);
-		registration.setUsername(username);
-		registration.setPassword(password);
+	public String register(Registration registration) {
+		if(registrationMap.get(registration.getUsername()) != null)
+			return "User Already Registered";
 		
-		registrationList.add(registration);
-		
-		return registrationList;
-	}
-	
-	@Override
-	public List<Registration> setDummyData() {
-		return register("Kulbhushan", "KB", "Dummy", "9085673459", "demo.spring@learn.com");
-	}
-
-	public List<Registration> getRegistrationList() {
-		return registrationList;
-	}
-
-	public void setRegistrationList(List<Registration> registrationList) {
-		this.registrationList = registrationList;
+		registrationMap.put(registration.getUsername(),registration);
+		return "Account Registered with Username :" + registration.getUsername();
 	}
 
 }

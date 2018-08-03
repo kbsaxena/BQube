@@ -1,36 +1,47 @@
 package com.cartZone.cart;
 
-import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cartZone.cart.pojo.Registration;
 import com.cartZone.cart.service.LoginServices;
 
 @Controller
-public class LoginController {
-
-	@Autowired
-	private LoginServices loginService;
+public class LoginController{
 	
-	@GetMapping("/getData/{id}")
+	@Autowired
+	LoginServices loginService;
+	
+	/***
+	 * 
+	 * @param registerationObj
+	 * @return username
+	 * 
+	 * API for Registering the User
+	 */
+	@PostMapping("/register")
     @ResponseBody
-    public Registration getUserDetails(@RequestParam(name="id", required=true) int id) {
-		List<Registration> regList =  loginService.setDummyData();
-		
-		Registration registrationObj = regList.get(0);
-		
-		return registrationObj;
+    public String registerUser(@RequestBody Registration registerationObj) {
+		return loginService.register(registerationObj);
     }
 	
-	//Under Process
-	/*@PostMapping("/register")
+	
+	/***
+	 * 
+	 * @param userCreds
+	 * @return isRegistered or not
+	 * 
+	 * Verifying the user Credentials
+	 */
+	@PostMapping("/login")
     @ResponseBody
-    public String getUserDetails(@RequestBody) {
-        return "Kulbhushan Saxena";
-    }*/
+    public boolean verifyUser(@RequestBody Map<String, String> userCreds) {
+		return loginService.login(userCreds.get("username"), userCreds.get("password"));
+    }
+	
 }
