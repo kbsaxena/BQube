@@ -1,6 +1,6 @@
 Testing the API:
 
-Do a maven build and then run as Spring application
+Do a maven build without test and then run as Spring application
 
 1. now go to browser and Install Postman chrome plugin
 2. Open new Request 
